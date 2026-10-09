@@ -124,6 +124,13 @@ extern "C" void glcontext(int);
 #else
 #define LOGMSG (*logptr(contextptr))
 #endif
+#if defined FLOWCE && defined TICE && !defined WITH_STATD
+// The probability distributions other than normal and binomial (poisson, student, chisquare, fisher,
+// cauchy, uniform, geometric, multinomial, UTPT/UTPC/UTPF, incomplete Beta) are not in the
+// calculator's command table (static_lexer.h): no one can type them, but the random generators and
+// the derivative rules named them, which kept their code in the app.
+#define NO_STATD
+#endif
 
 #ifdef __sparc__
 #define DOUBLEVAL

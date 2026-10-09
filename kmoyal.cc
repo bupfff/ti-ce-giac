@@ -270,6 +270,7 @@ namespace giac {
   static define_unary_function_eval (__randnormald,&_randNorm,_randnormald_s);
   define_unary_function_ptr5( at_randnormald ,alias_at_randnormald,&__randnormald,0,true);
 
+#ifndef NO_STATD // (first.h)
   double randchisquare(int k,GIAC_CONTEXT){
     double res=0.0;
     for (int i=0;i<k;++i){
@@ -334,6 +335,7 @@ namespace giac {
   static const char _randfisherd_s []="randfisherd";
   static define_unary_function_eval (__randfisherd,&_randfisher,_randfisherd_s);
   define_unary_function_ptr5( at_randfisherd ,alias_at_randfisherd,&__randfisherd,0,true);
+#endif // NO_STATD
 
   static gen normald(const gen & m,const gen & s,const gen & x,GIAC_CONTEXT){
     gen v(s*s);
@@ -550,6 +552,7 @@ namespace giac {
   static define_unary_function_eval (__BINOMIAL,&_binomial,_BINOMIAL_s);
   define_unary_function_ptr5( at_BINOMIAL ,alias_at_BINOMIAL,&__BINOMIAL,0,true);
 
+#ifndef NO_STATD // (first.h)
   gen _multinomial(const gen & g,GIAC_CONTEXT){
     if ( g.type==_STRNG && g.subtype==-1) return  g;
     if (g.type!=_VECT)
@@ -612,6 +615,7 @@ namespace giac {
   static define_unary_function_eval (__randmultinomial,&_randmultinomial,_randmultinomial_s);
   define_unary_function_ptr5( at_randmultinomial ,alias_at_randmultinomial,&__randmultinomial,0,true);
 
+#endif // NO_STATD
   gen _negbinomial(const gen & g,GIAC_CONTEXT){
     if ( g.type==_STRNG && g.subtype==-1) return  g;
     if (g.type!=_VECT)
@@ -635,6 +639,7 @@ namespace giac {
   static const char _negbinomial_s []="negbinomial";
   static define_unary_function_eval (__negbinomial,&_negbinomial,_negbinomial_s);
   define_unary_function_ptr5( at_negbinomial ,alias_at_negbinomial,&__negbinomial,0,true);
+#ifndef NO_STATD // (first.h)
 
   gen _negbinomial_cdf(const gen & g,GIAC_CONTEXT){
     if ( g.type==_STRNG && g.subtype==-1) return  g;
@@ -693,6 +698,7 @@ namespace giac {
   static const char _negbinomial_icdf_s []="negbinomial_icdf";
   static define_unary_function_eval (__negbinomial_icdf,&_negbinomial_icdf,_negbinomial_icdf_s);
   define_unary_function_ptr5( at_negbinomial_icdf ,alias_at_negbinomial_icdf,&__negbinomial_icdf,0,true);
+#endif // NO_STATD
 
   gen binomial_cdf(const gen & n,const gen &p,const gen & x0,const gen & x,GIAC_CONTEXT){
     gen fx=_floor(x,contextptr),fx0=_ceil(x0,contextptr);
@@ -1143,6 +1149,7 @@ namespace giac {
   static define_unary_function_eval (__poisson_icdf,&_poisson_icdf,_poisson_icdf_s);
   define_unary_function_ptr5( at_poisson_icdf ,alias_at_poisson_icdf,&__poisson_icdf,0,true);
 
+#ifndef NO_STATD // (first.h)
   gen student(const gen & n0,const gen & x,GIAC_CONTEXT){
     if (x.type==_VECT)
       return apply2nd(n0,x,contextptr,student);
@@ -2275,6 +2282,7 @@ namespace giac {
   static const char _randgeometric_s []="randgeometric";
   static define_unary_function_eval (__randgeometric,&_randgeometric,_randgeometric_s);
   define_unary_function_ptr5( at_randgeometric ,alias_at_randgeometric,&__randgeometric,0,true);
+#endif // NO_STATD
 
   // return 0 if not distrib
   // 1 normal, 2 binomial, 3 negbinomial, 4 poisson, 5 student, 
@@ -2295,6 +2303,7 @@ namespace giac {
 	return 1;
       if (args==at_binomial || args==at_BINOMIAL)
 	return 2;
+#ifndef NO_STATD // (first.h: only normal and binomial in FlowCE)
       if (args==at_negbinomial)
 	return 3;
       if (args==at_poisson || args==at_POISSON)
@@ -2319,6 +2328,7 @@ namespace giac {
 	return 13;
       if (args==at_exp || args==at_exponential || args==at_exponentiald)
 	return 14;
+#endif
     }
     return 0;
   }
@@ -2382,7 +2392,11 @@ namespace giac {
   gen icdf(int n){
     static vecteur * icdf_static=0;
     if (!icdf_static)
+#ifdef NO_STATD
+      icdf_static=new vecteur(makevecteur(at_normald_icdf,at_binomial_icdf));
+#else
       icdf_static=new vecteur(makevecteur(at_normald_icdf,at_binomial_icdf,undef,at_poisson_icdf,at_studentd_icdf,at_fisherd_icdf,at_cauchyd_icdf,at_weibulld_icdf,at_betad_icdf,at_gammad_icdf,at_chisquared_icdf,at_geometric_icdf,at_uniformd_icdf,at_exponentiald_icdf));
+#endif
     if (n<=0 || n>int(icdf_static->size()))
       return undef;
     return (*icdf_static)[n-1];

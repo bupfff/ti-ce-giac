@@ -4230,6 +4230,7 @@ namespace giac {
 #ifdef XLIGHT
     return;
 #endif
+#ifndef NO_STATD
     if (f==at_uniform || f==at_uniformd){
       for (int i=0;i<n;++i)
 	res.push_back(giac_rand(contextptr)/(rand_max2+1.0));
@@ -4275,7 +4276,12 @@ namespace giac {
 	res.push_back(randpoisson(lambda,contextptr));
       return;     
     }
+#endif // NO_STATD
+#ifdef NO_STATD
+    if (f.is_exp()){
+#else
     if (f.is_exp() || f.is_symb_of_sommet(at_randexp) || f.is_symb_of_sommet(at_exponential) || f.is_symb_of_sommet(at_exponentiald)){
+#endif
       f=evalf_double(f._SYMBptr->feuille,1,contextptr);
       if (f.type!=_DOUBLE_ || f._DOUBLE_val<=0){
 	res=vecteur(1,gensizeerr(contextptr));
@@ -4286,6 +4292,7 @@ namespace giac {
 	res.push_back(gen(-std::log(1-giac_rand(contextptr)/(rand_max2+1.0))/lambda));
       return;     
     }
+#ifndef NO_STATD
     if (f.is_symb_of_sommet(at_geometric) || f.is_symb_of_sommet(at_randgeometric)){
       f=evalf_double(f._SYMBptr->feuille,1,contextptr);
       if (f.type!=_DOUBLE_ || f._DOUBLE_val<=0){
@@ -4297,6 +4304,7 @@ namespace giac {
 	res.push_back(int(std::ceil(std::log(1-giac_rand(contextptr)/(rand_max2+1.0))/lambda)));
       return;     
     }
+#endif // NO_STATD
     if (f==at_normald || f==at_NORMALD || f==at_normal || f==at_randNorm || f==at_randnormald)
       f=symbolic(at_normald,makesequence(0,1));
     if ( (f.is_symb_of_sommet(at_normald) || f.is_symb_of_sommet(at_NORMALD) || f.is_symb_of_sommet(at_normal) || f.is_symb_of_sommet(at_randNorm) || f.is_symb_of_sommet(at_randnormald)) && f._SYMBptr->feuille.type==_VECT && f._SYMBptr->feuille._VECTptr->size()==2 ){
@@ -4327,6 +4335,7 @@ namespace giac {
       }
       return;     
     }
+#ifndef NO_STATD
     if ( (f.is_symb_of_sommet(at_fisher) || f.is_symb_of_sommet(at_fisherd) || f.is_symb_of_sommet(at_randfisherd)
 	  || f.is_symb_of_sommet(at_snedecor) 
 	  || f.is_symb_of_sommet(at_randfisher)) && f._SYMBptr->feuille.type==_VECT && f._SYMBptr->feuille._VECTptr->size()==2 ){
@@ -4424,6 +4433,7 @@ namespace giac {
 	vector_int2vecteur(eff,res);
       return;
     }
+#endif // NO_STATD
     if ( (f.is_symb_of_sommet(at_binomial) || f.is_symb_of_sommet(at_BINOMIAL))
 	 && f._SYMBptr->feuille.type==_VECT && f._SYMBptr->feuille._VECTptr->size()==2){
       gen N=f._SYMBptr->feuille._VECTptr->front();
@@ -4570,9 +4580,11 @@ namespace giac {
 	    return gen(M,_MATRIX__VECT);
 	  }
 	  if (loi.type==_FUNC){
+#ifndef NO_STATD
 	    if (loi==at_multinomial)
 	      loi=symbolic(at_multinomial,e._VECTptr->back());
 	    else
+#endif
 	      loi=loi(e._VECTptr->back(),contextptr);
 	  }
 	  else
@@ -4582,9 +4594,11 @@ namespace giac {
 	if (e._VECTptr->size()>4){
 	  gen loi=(*e._VECTptr)[2];
 	  if (loi.type==_FUNC){
+#ifndef NO_STATD
 	    if (loi==at_multinomial)
 	      loi=symbolic(at_multinomial,gen(vecteur(e._VECTptr->begin()+3,e._VECTptr->end()),_SEQ__VECT));
 	    else
+#endif
 	      loi=loi(gen(vecteur(e._VECTptr->begin()+3,e._VECTptr->end()),_SEQ__VECT),contextptr);
 	  }
 	  else
@@ -4638,9 +4652,11 @@ namespace giac {
           return undef;
 #endif
 	  if (loi.type==_FUNC){
+#ifndef NO_STATD
 	    if (loi==at_multinomial)
 	      loi=symbolic(at_multinomial,e._VECTptr->back());
 	    else
+#endif
 	      loi=loi(e._VECTptr->back(),contextptr);
 	  }
 	  else
@@ -4648,9 +4664,11 @@ namespace giac {
 	}
 	if (e._VECTptr->size()>3){
 	  if (loi.type==_FUNC){
+#ifndef NO_STATD
 	    if (loi==at_multinomial)
 	      loi=symbolic(at_multinomial,gen(vecteur(e._VECTptr->begin()+2,e._VECTptr->end()),_SEQ__VECT));
-	    else 
+	    else
+#endif
 	      loi=loi(gen(vecteur(e._VECTptr->begin()+2,e._VECTptr->end()),_SEQ__VECT),contextptr);
 	  }
 	  else

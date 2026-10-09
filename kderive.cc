@@ -203,6 +203,7 @@ namespace giac {
       }
       return gensizeerr(gettext("Derivative of rootof currently not handled"));
     }
+#ifndef NO_STATD
     if (s.sommet==at_UTPT){
       if (s.feuille.type!=_VECT || s.feuille._VECTptr->size()!=2)
 	return gensizeerr(contextptr);
@@ -221,6 +222,7 @@ namespace giac {
       gen & arg=s.feuille._VECTptr->back();
       return -derive(arg,i,contextptr)*_snedecor(s.feuille,contextptr);
     }
+#endif
     if (s.sommet==at_program){
       return gensizeerr(gettext("Expecting an expression, not a function"));
     }
@@ -272,6 +274,7 @@ namespace giac {
 	  return exponent*dbase*s/v[1];
 	return dexponent*ln(base,contextptr)*s+exponent*dbase*s/v[1];
       }
+#ifndef NO_STATD
       if (vs>=3 && s.sommet==at_Beta){
 	gen v0=v[0],v1=v[1],v2=v[2]; 
 	if (!is_zero(derive(v0,i,contextptr)) || !is_zero(derive(v1,i,contextptr)) )
@@ -289,6 +292,7 @@ namespace giac {
 	}
 	return tmp;
       }
+#endif
       if (vs==4 && s.sommet==at_sum){
 	gen v0=v[0],v1=v[1],v2=v[2],v3=v[3];
 	if (!is_zero(derive(v1,i,contextptr)) || !is_zero(derive(v2,i,contextptr)) || ! is_zero(derive(v3,i,contextptr)) )
