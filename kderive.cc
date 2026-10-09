@@ -185,9 +185,13 @@ namespace giac {
 	// d/dx(P(y))=(dP/dx)(y) + (dP/dy) (dy/dx)
 	//           =(dP/dx)(y) - (dP/dy) (dQ/dx)/(dQ/dy)
 	// where y dependency is in the list polynomial P/Q
-	gen Px=trim(*derive(P,i,contextptr)._VECTptr,0);
+	// (an interrupted derive gives an error, not a vector: FlowCE)
+	gen dP=derive(P,i,contextptr),dQ=derive(Q,i,contextptr);
+	if (dP.type!=_VECT) return dP;
+	if (dQ.type!=_VECT) return dQ;
+	gen Px=trim(*dP._VECTptr,0);
 	Px=symb_rootof(Px,Q,contextptr);
-	gen Qx=trim(*derive(Q,i,contextptr)._VECTptr,0);
+	gen Qx=trim(*dQ._VECTptr,0);
 	Qx=symb_rootof(Qx,Q,contextptr);
 	gen Py=derivative(P);
 	Py=symb_rootof(Py,Q,contextptr);
