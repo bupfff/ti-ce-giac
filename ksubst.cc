@@ -400,7 +400,10 @@ namespace giac {
     vecteur v=*e._SYMBptr->feuille._VECTptr;
     int s=int(v.size());
     if ( (s>1) && (v[1]==i) ){
-      vecteur l(*_lname(newi,contextptr)._VECTptr);
+      gen ln=_lname(newi,contextptr); // an error (an interrupted calculation): passed on
+      if (ln.type!=_VECT)
+	return ln;
+      vecteur l(*ln._VECTptr);
       if (!l.empty() && l.front()==cst_pi)
 	l.erase(l.begin());
       if (l.empty())
@@ -443,7 +446,10 @@ namespace giac {
     vecteur v=*e._SYMBptr->feuille._VECTptr;
     int s=int(v.size());
     if ( (s==2) && (v[1]==i) ){
-      vecteur l(*_lname(newi,contextptr)._VECTptr);
+      gen ln=_lname(newi,contextptr); // an error (an interrupted calculation): passed on
+      if (ln.type!=_VECT)
+	return ln;
+      vecteur l(*ln._VECTptr);
       if (l.empty())
 	return gensizeerr(contextptr);
       v[1]=l.front();
