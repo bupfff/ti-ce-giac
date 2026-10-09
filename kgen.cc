@@ -2347,6 +2347,10 @@ namespace giac {
 	if (is_plus || (is_prod=(Sommet==at_prod)) || (is_pow=(Sommet==at_pow)) || (is_of_local_ifte_bloc=(Sommet==at_of || Sommet==at_local || (is_ifte=Sommet==at_ifte) || Sommet==at_bloc)) ){
 	  int & elevel=eval_level(contextptr);
 	  short int slevel=elevel;
+	  if ((size_t)&slevel<stack_floor){ // a function defined by itself (f(x):=1+x*f(x^2)) never
+	    gensizeerr(gettext("Too many recursion levels"),evaled); // reaches _program's count
+	    return true;
+	  }
 	  // Check if we are not far from stack end
 #ifdef RTOS_THREADX
 	  if ((void *)&slevel<= (void *)&mainThreadStack[2048]){
