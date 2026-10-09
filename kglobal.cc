@@ -1682,6 +1682,7 @@ extern "C" void Sleep(unsigned int miliSecond);
   const int BUFFER_SIZE=16384;
 #endif
   size_t stack_floor=0; // in_eval stops below this stack address (0: no check); set by the app
+  volatile bool stack_hit=false; // it did (and set interrupted): the app says why, then resets it
   volatile bool ctrl_c=false,interrupted=false,kbd_interrupted=false;
 #if defined GIAC_HAS_STO_38 || defined TICE
   double powlog2float=1e4;

@@ -2348,7 +2348,8 @@ namespace giac {
 	  int & elevel=eval_level(contextptr);
 	  short int slevel=elevel;
 	  if ((size_t)&slevel<stack_floor){ // a function defined by itself (f(x):=1+x*f(x^2)) never
-	    gensizeerr(gettext("Too many recursion levels"),evaled); // reaches _program's count
+	    stack_hit=ctrl_c=interrupted=true; // reaches _program's count: all stops, as with ON (the
+	    gensizeerr(gettext("Too many recursion levels"),evaled); // callers retried down to here)
 	    return true;
 	  }
 	  // Check if we are not far from stack end
