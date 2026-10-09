@@ -2494,6 +2494,13 @@ extern "C" void Sleep(unsigned int miliSecond);
   }
 #endif
 
+#ifdef TICE
+  // the at_ pointers of the static lexer table, a constant table (FlowCE: built on the stack at
+  // each identifier, it cost 3.7 KB of code and a 1.3 KB frame; the nspire needs that, see below)
+  static const unary_function_ptr * const builtin_lexer_tab[]={
+#include "static_lexer_.h"
+  };
+#endif
     int find_or_make_symbol(const string & s,gen & res,void * scanner,bool check38,GIAC_CONTEXT){
 #if 0
       if (s.size()==1){
@@ -2537,10 +2544,14 @@ extern "C" void Sleep(unsigned int miliSecond);
 	  }
 #else // keep this code, required for the nspire otherwise evalf(pi)=reboot
 	  int pos=p.first-builtin_lexer_functions_begin();
+#ifdef TICE
+	  res=gen(builtin_lexer_tab[pos]);
+#else
 	  const unary_function_ptr * tab[]={
 #include "static_lexer_.h"
 	  };
 	  res=gen(tab[pos]);
+#endif
 	  if (builtin_lexer_functions[pos]._FUNC_%2){
 #ifdef TICE
 	    res._FUNC_ |= 0x800000;
