@@ -578,7 +578,7 @@ namespace giac {
     const_iterateur itb=b._SYMBptr->feuille._VECTptr->begin(),itbend=b._SYMBptr->feuille._VECTptr->end();
     vecteur v;
     v.reserve((itbend-itb)*(itaend-ita));
-    for (;ita!=itaend;++ita){
+    for (;ita!=itaend && !(ctrl_c || interrupted);++ita){
       for (itb=b._SYMBptr->feuille._VECTptr->begin();itb!=itbend;++itb)
 	v.push_back( (*ita) * (*itb) );
     }
@@ -589,7 +589,7 @@ namespace giac {
     int s=int(itend-it);
     if (s==0)
       return plus_one;
-    if (s==1)
+    if (s==1 || (ctrl_c || interrupted))
       return *it;
     return _simplifier(prod_expand(prod_expand(it,it+s/2,contextptr),prod_expand(it+s/2,itend,contextptr),contextptr),contextptr);
   }
@@ -618,6 +618,8 @@ namespace giac {
   }
 
   static void pow_expand_add_res(vector<gen> & factn,int pos,int sumexpo,const gen & coeff,const vecteur & w,const gen & p, int k,int n,vecteur & res,GIAC_CONTEXT){
+    if (ctrl_c || interrupted)
+      return;
     if (sumexpo==k){
       // End recursion
       res.push_back(coeff*p);
@@ -677,7 +679,7 @@ namespace giac {
 	return gensizeerr(contextptr);
       vecteur res;
       gen p;
-      for (int i=k;i>=0;--i){
+      for (int i=k;i>=0 && !(ctrl_c || interrupted);--i){
 	p=expand(pow(w[0],i),contextptr);
 	pow_expand_add_res(factn,1,i,factn[k]/factn[i],w,p,k,n,res,contextptr);
       }
@@ -905,6 +907,8 @@ namespace giac {
   define_unary_function_ptr5( at_texpand ,alias_at_texpand,&__texpand,0,true);
 
   gen expand(const gen & e,GIAC_CONTEXT){
+    if (ctrl_c || interrupted) // stopped (ON, out of memory): no more expansion, the result is not used
+      return e;
     if (is_equal(e))
       return apply_to_equal(e,expand,contextptr);
     gen var,res;

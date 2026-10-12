@@ -5950,6 +5950,8 @@ namespace giac {
 #if 0 // def NSPIRE
     return g;
 #endif
+    if (ctrl_c || interrupted) // stopped: the result is not used
+      return g;
     if (g.type!=_SYMB || g._SYMBptr->sommet==at_program || g._SYMBptr->sommet==at_pnt || g._SYMBptr->sommet==at_unit || g._SYMBptr->sommet==at_integrate || g._SYMBptr->sommet==at_superieur_strict || g._SYMBptr->sommet==at_superieur_egal || g._SYMBptr->sommet==at_inferieur_strict || g._SYMBptr->sommet==at_inferieur_egal || g._SYMBptr->sommet==at_and || g._SYMBptr->sommet==at_ou || g._SYMBptr->sommet==at_not || g._SYMBptr->sommet==at_xor || g._SYMBptr->sommet==at_piecewise
 #if 0 // !defined FXCG && !defined TICE
 	|| g._SYMBptr->sommet==at_archive

@@ -9416,7 +9416,7 @@ namespace giac {
     vecteur varg=gen2vecteur(x._SYMBptr->feuille);
     vecteur vres;
     const_iterateur it=varg.begin(),itend=varg.end();    
-    for (;it!=itend;++it){
+    for (;it!=itend && !(ctrl_c || interrupted);++it){
       if (it->type<_POLY || it->type==_FRAC)
 	number=number+(*it);
       else
