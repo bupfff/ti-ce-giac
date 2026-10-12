@@ -1683,6 +1683,10 @@ extern "C" void Sleep(unsigned int miliSecond);
 #endif
   size_t stack_floor=0; // in_eval stops below this stack address (0: no check); set by the app
   volatile bool stack_hit=false; // it did (and set interrupted): the app says why, then resets it
+  // memory ran out (set by the app's allocator with interrupted): expansion and simplification
+  // loops stop at once (TICE has no exceptions: they went on until memory ran out again); the
+  // checks need interrupted too, which every evaluation clears
+  volatile bool oom_stop=false;
   volatile bool ctrl_c=false,interrupted=false,kbd_interrupted=false;
 #if defined GIAC_HAS_STO_38 || defined TICE
   double powlog2float=1e4;
