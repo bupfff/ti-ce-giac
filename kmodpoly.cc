@@ -2242,7 +2242,12 @@ namespace giac {
     // copy rem to an array
     vector<int>::const_iterator remit=rem.begin();//,remend=rem.end();
     if ((a-b+1)*double(m)*m<9e15){
+#ifdef TICE // a heap buffer: the CE toolchain v15's frame bias miscompiles a function with a
+      // variable-length array (its epilogue restored sp from the biased ix)
+      vector<longlong> tmpv(a+1); longlong * tmp=&tmpv.front();
+#else
       ALLOCA(longlong, tmp, (a+1)*sizeof(longlong));//longlong * tmp=(longlong *)alloca((a+1)*sizeof(longlong));
+#endif
       longlong * tmpend=&tmp[a];
       longlong * tmpptr=tmpend; // tmpend points to the highest degree coeff of A
       for (;tmpptr!=tmp-1;--tmpptr,++remit)
@@ -2284,6 +2289,9 @@ namespace giac {
     }
 #if defined VISUALC || defined BESTA_OS
     int * tmp=new int[a+1];
+#elif defined TICE // a heap buffer: the CE toolchain v15's frame bias miscompiles a function with a
+    // variable-length array (its epilogue restored sp from the biased ix)
+    vector<int> tmpv(a+1); int * tmp=&tmpv.front();
 #else
     int tmp[a+1];
 #endif

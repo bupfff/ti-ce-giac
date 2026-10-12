@@ -1498,7 +1498,7 @@ void displaygraph(const giac::gen & ge){
       strcpy(menu_ymax,s.c_str());
       Menu smallmenu;
       smallmenu.numitems=15;
-      MenuItem smallmenuitems[smallmenu.numitems];
+      MenuItem smallmenuitems[15];
       smallmenu.items=smallmenuitems;
       smallmenu.height=8;
       //smallmenu.title = "KhiCAS";
