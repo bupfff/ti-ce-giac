@@ -2408,7 +2408,7 @@ static define_unary_function_eval (__set_language,&_scatterplot,_set_language_s)
     s=(char *)Console_GetLine();
     set_abort();
 #else
-    int res=inputline("enter: ok, annul: interrompt",args.type==_STRNG?(args._STRNGptr->c_str()):"input ?",s,false,40);
+    int res=inputline("enter: ok, clear: cancel",args.type==_STRNG?(args._STRNGptr->c_str()):"input ?",s,false,40);
     cout << (args.type==_STRNG?*args._STRNGptr:"input ?") << s << "\n";
     if (!freeze)
       dConsoleRedraw();
