@@ -10024,8 +10024,8 @@ const mksa_unit __lambda0_unit={1.239841984e-6,1,0,0,0,0,0,0}; // inverse meter-
     &__tex,
     &__therm_unit,
     &__toe_unit,
-    &__tonUK_unit,
-    &__ton_unit,
+    &__ton_unit, // (DeltaCE: was &__tonUK_unit then &__ton_unit, against the names' order:
+    &__tonUK_unit, // _ton gave 1016 kg and _tonUK 907 kg)
     &__tr_unit,
     &__tsp_unit,
     &__u_unit,
