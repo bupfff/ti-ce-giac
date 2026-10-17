@@ -3749,6 +3749,78 @@ namespace giac {
 
   static const char _factor_s []="factor";
   //symbolic symb_factor(const gen & args){    return symbolic(at_factor,args);  }
+  // (DeltaCE) the calculator's factor misses factors the PC's finds: factor(16x^4-81) gave
+  // (2x+3)(8x^3-12x^2+18x-27), factor(x^3+125) x^3+125 (24-bit ints?). Each factor of a polynomial
+  // in one variable is checked: a rational root (the rational root test: +-p/q, p dividing the
+  // constant, q the leading coefficient) is divided out; one of degree 3 or more factored again.
+  static bool rational_root(const vecteur & v,gen & r){ // v: whole coefficients, highest first
+    if (v.size()<3) return false;
+    for (unsigned i=0;i<v.size();++i) if (v[i].type!=_INT_) return false;
+    const long a0=v.back().val<0?-(long)v.back().val:v.back().val,an=v.front().val<0?-(long)v.front().val:v.front().val;
+    if (!a0 || a0>1000000L || an>1000000L) return false;
+    for (long p=1;p*p<=a0;++p){
+      if (a0%p) continue;
+      const long ps[2]={p,a0/p};
+      for (int k=0;k<2;++k)
+        for (long q=1;q*q<=an;++q){
+          if (an%q) continue;
+          const long qs[2]={q,an/q};
+          for (int j=0;j<2;++j)
+            for (int sg=-1;sg<=1;sg+=2){
+              const gen c=gen(int(sg*ps[k]))/gen(int(qs[j]));
+              if (is_zero(horner(v,c))){ r=c; return true; }
+            }
+        }
+    }
+    return false;
+  }
+  static void refactor_into(const gen & f,vecteur & out,int depth,GIAC_CONTEXT){
+    gen b=f,e=1;
+    if (b.is_symb_of_sommet(at_pow) && b._SYMBptr->feuille.type==_VECT && b._SYMBptr->feuille._VECTptr->size()==2){
+      e=b._SYMBptr->feuille._VECTptr->back(); b=b._SYMBptr->feuille._VECTptr->front();
+    }
+    vecteur l=lvar(b);
+    if (depth<6 && l.size()==1 && l.front().type==_IDNT){
+      const gen x=l.front(),c=_coeff(makesequence(b,x),contextptr);
+      gen r;
+      if (c.type==_VECT && rational_root(*c._VECTptr,r)){ // q x - p, then the quotient's factors
+        const gen p=r.type==_FRAC?r._FRACptr->num:r,q=r.type==_FRAC?r._FRACptr->den:gen(1),lin=q*x-p;
+        const gen quo=_quo(makesequence(b,lin,x),contextptr),fq=factorcollect(quo,withsqrt(contextptr),contextptr);
+        out.push_back(is_one(e)?lin:symbolic(at_pow,makesequence(lin,e)));
+        if (fq.is_symb_of_sommet(at_prod) && fq._SYMBptr->feuille.type==_VECT){
+          const vecteur & w=*fq._SYMBptr->feuille._VECTptr;
+          for (unsigned j=0;j<w.size();++j) refactor_into(is_one(e)?w[j]:symbolic(at_pow,makesequence(w[j],e)),out,depth+1,contextptr);
+        }
+        else if (!is_one(fq)) refactor_into(is_one(e)?fq:symbolic(at_pow,makesequence(fq,e)),out,depth+1,contextptr);
+        return;
+      }
+      const gen d=_degree(makesequence(b,x),contextptr);
+      if (d.type==_INT_ && d.val>=3){
+        const gen g=factorcollect(b,withsqrt(contextptr),contextptr);
+        if (g.is_symb_of_sommet(at_prod) && g._SYMBptr->feuille.type==_VECT){
+          const vecteur & w=*g._SYMBptr->feuille._VECTptr;
+          for (unsigned j=0;j<w.size();++j) refactor_into(is_one(e)?w[j]:symbolic(at_pow,makesequence(w[j],e)),out,depth+1,contextptr);
+          return;
+        }
+      }
+    }
+    out.push_back(f);
+  }
+  static gen refactor(const gen & r,GIAC_CONTEXT){
+    if (r.is_symb_of_sommet(at_neg))
+      return symbolic(at_neg,refactor(r._SYMBptr->feuille,contextptr));
+    vecteur v;
+    if (r.is_symb_of_sommet(at_prod) && r._SYMBptr->feuille.type==_VECT){
+      const vecteur & w=*r._SYMBptr->feuille._VECTptr;
+      for (unsigned i=0;i<w.size();++i) refactor_into(w[i],v,0,contextptr);
+    }
+    else if (r.type==_SYMB)
+      refactor_into(r,v,0,contextptr);
+    else
+      return r;
+    if (v.size()==1) return v.front();
+    return symbolic(at_prod,gen(v,_SEQ__VECT));
+  }
   gen _factor(const gen & args,GIAC_CONTEXT){
     if ( args.type==_STRNG && args.subtype==-1) return  args;
     if (is_integer(args))
@@ -3768,7 +3840,7 @@ namespace giac {
       res=factorcollect(args,lvar(args).size()==1,contextptr);
     else
       res=factorcollect(args,withsqrt(contextptr),contextptr);
-    return res;
+    return refactor(res,contextptr);
   }
   static define_unary_function_eval (__factor,&_factor,_factor_s);
   define_unary_function_ptr5( at_factor ,alias_at_factor,&__factor,0,true);
