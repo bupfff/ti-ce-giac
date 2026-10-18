@@ -138,7 +138,7 @@ at_convert,
 //at_coordinates,
 at_copy,
 at_copysign,
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_correlation,
 #endif
 at_cos,
@@ -150,7 +150,7 @@ at_count_eq,
 at_count_inf,
 at_count_sup,
 //at_curvature,
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_covariance,
 #endif
 at_cpartfrac,
@@ -253,8 +253,10 @@ at_expand,
 at_expexpand,
 at_expln2trig,
 at_expm1,
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_exponential_regression,
+#endif
+#ifdef WITH_SHEET
 at_exponential_regression_plot,
 #endif
 //at_exponentiald,
@@ -442,8 +444,10 @@ at_lin,
 #ifdef WITH_PLOT
 at_droite,
 #endif
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_linear_regression,
+#endif
+#ifdef WITH_SHEET
 at_linear_regression_plot,
 #endif
 //at_LineTan,
@@ -458,8 +462,10 @@ at_lncollect,
 at_lnexpand,
 at_ln,
 at_log10,
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_logarithmic_regression,
+#endif
+#ifdef WITH_SHEET
 at_logarithmic_regression_plot,
 #endif
 at_logb,
@@ -479,7 +485,7 @@ at_matrix_norm,
 at_max,
 //at_max_algext,
 at_maxnorm,
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_mean,
 at_median,
 #endif
@@ -570,7 +576,11 @@ at_polygone_rempli,
 //at_polygonplot,
 #ifdef WITH_SHEET
 at_polygonscatterplot,
+#endif
+#if defined WITH_SHEET || defined WITH_STATS
 at_polynomial_regression,
+#endif
+#ifdef WITH_SHEET
 at_polynomial_regression_plot,
 #endif
 //at_pop,
@@ -579,8 +589,10 @@ at_position,
 #endif
 //at_potential,
 at_pow2exp,
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_power_regression,
+#endif
+#ifdef WITH_SHEET
 at_power_regression_plot,
 #endif
 at_powermod,
@@ -609,6 +621,8 @@ at_q2a,
 //at_qr,
 #ifdef WITH_SHEET
 //at_quantile,
+#endif
+#if defined WITH_SHEET || defined WITH_STATS
 at_quartile1,
 at_quartile3,
 at_quartiles,
@@ -743,7 +757,10 @@ at_sqrt,
 at_srand,
 at_sst,
 at_sst_in,
-//at_stddev,
+#if defined WITH_SHEET || defined WITH_STATS
+at_stdDev,
+at_stddev,
+#endif
 at_sto,
 at_str,
 at_string,
@@ -828,7 +845,7 @@ at_usimplify,
 #endif
 at_valuation,
 //at_vandermonde,
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 at_variance,
 #endif
 #ifdef WITH_PLOT

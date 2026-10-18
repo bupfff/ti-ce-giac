@@ -138,7 +138,7 @@
 //{"coordonnees",0,9,13},
 {"copy",0,9,13},
 {"copysign",0,9,13},
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"correlation",0,9,13},
 #endif
 {"cos",0,9,13},
@@ -150,7 +150,7 @@
 {"count_inf",0,9,13},
 {"count_sup",0,9,13},
 //{"courbure",0,9,13},
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"covariance",0,9,13},
 #endif
 {"cpartfrac",0,9,13},
@@ -253,8 +253,10 @@
 {"expexpand",0,9,13},
 {"expln2trig",0,9,13},
 {"expm1",0,9,13},
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"exponential_regression",0,9,13},
+#endif
+#ifdef WITH_SHEET
 {"exponential_regression_plot",0,9,13},
 #endif
 //{"exponentiald",0,9,13},
@@ -442,8 +444,10 @@
 #ifdef WITH_PLOT
 {"line",0| 1,9,13},
 #endif
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"linear_regression",0,9,13},
+#endif
+#ifdef WITH_SHEET
 {"linear_regression_plot",0,9,13},
 #endif
 //{"linetan",0,9,13},
@@ -458,8 +462,10 @@
 {"lnexpand",0,9,13},
 {"log",0,9,13},
 {"log10",0,9,13},
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"logarithmic_regression",0,9,13},
+#endif
+#ifdef WITH_SHEET
 {"logarithmic_regression_plot",0,9,13},
 #endif
 {"logb",0,9,13},
@@ -479,7 +485,7 @@
 {"max",0,9,13},
 //{"max_algext",0,9,13},
 {"maxnorm",0,9,13},
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"mean",0,9,13},
 {"median",0,9,13},
 #endif
@@ -570,7 +576,11 @@
 //{"polygonplot",0,9,13},
 #ifdef WITH_SHEET
 {"polygonscatterplot",0,9,13},
+#endif
+#if defined WITH_SHEET || defined WITH_STATS
 {"polynomial_regression",0,9,13},
+#endif
+#ifdef WITH_SHEET
 {"polynomial_regression_plot",0,9,13},
 #endif
 //{"pop",0,9,13},
@@ -579,8 +589,10 @@
 #endif
 //{"potential",0| 1,9,13},
 {"pow2exp",0,9,13},
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"power_regression",0,9,13},
+#endif
+#ifdef WITH_SHEET
 {"power_regression_plot",0,9,13},
 #endif
 {"powermod",0,9,13},
@@ -609,6 +621,8 @@
 //{"qr",0,9,13},
 #ifdef WITH_SHEET
 //{"quantile",0,9,13},
+#endif
+#if defined WITH_SHEET || defined WITH_STATS
 {"quartile1",0,9,13},
 {"quartile3",0,9,13},
 {"quartiles",0,9,13},
@@ -743,7 +757,10 @@
 {"srand",0,72,13},
 {"sst",0| 1,9,13},
 {"sst_in",0| 1,9,13},
-//{"stddev",0,9,13},
+#if defined WITH_SHEET || defined WITH_STATS
+{"stdDev",0,9,13},
+{"stddev",0,9,13},
+#endif
 {"sto",0,9,13},
 {"str",0,9,13},
 {"string",0,9,13},
@@ -828,7 +845,7 @@
 #endif
 {"valuation",0,9,13},
 //{"vandermonde",0,9,13},
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS
 {"variance",0,9,13},
 #endif
 #ifdef WITH_PLOT

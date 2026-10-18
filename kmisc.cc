@@ -4369,7 +4369,7 @@ static define_unary_function_eval (__set_language,&_scatterplot,_set_language_s)
   static define_unary_function_eval (__isfinite,&_isfinite,_isfinite_s);
   define_unary_function_ptr5( at_isfinite ,alias_at_isfinite,&__isfinite,0,true);
   
-#ifdef WITH_SHEET
+#if defined WITH_SHEET || defined WITH_STATS // (WITH_STATS: the statistics without the spreadsheet, DeltaCE)
   static gen stddevmean(const vecteur & v,int withstddev,int xcol,int freqcol,GIAC_CONTEXT){
     int sv=int(v.size());
     if (xcol>=sv || freqcol>=sv)
@@ -4527,6 +4527,16 @@ static define_unary_function_eval (__variance,&_variance,_variance_s);
 	islesscomplexthanf_sort(v.begin(),v.end());
 	return v[int(std::ceil(v.size()*d))-1]; // v[(v.size()-1)/4];
       }
+      if (d==0.5 && !v.empty()){
+        // DeltaCE: the median of exact values exact (3, not 3.0; 5/2): the values sorted by their
+        // decimal values, kept as they are (ascsort sorted the decimals)
+        const int n=int(v.size());
+        vector<double> f(n);
+        for (int i=0;i<n;++i){ gen e=evalf_double(v[i],1,contextptr); f[i]=e.type==_DOUBLE_?e._DOUBLE_val:0; }
+        for (int i=1;i<n;++i)
+          for (int j=i;j>0 && f[j-1]>f[j];--j){ double t=f[j]; f[j]=f[j-1]; f[j-1]=t; gen u=v[j]; v[j]=v[j-1]; v[j-1]=u; }
+        return n%2?v[n/2]:ratnormal((v[n/2-1]+v[n/2])/2,contextptr);
+      }
       matrice mt=mtran(ascsort(mtran(vecteur(1,v)),true));
       if (d==0.5 && !v.empty() && !(v.size()%2))
 	return (mt[v.size()/2][0]+mt[v.size()/2-1][0])/2;
@@ -4585,6 +4595,7 @@ static define_unary_function_eval (__variance,&_variance,_variance_s);
   static define_unary_function_eval(unary_quartiles,&_quartiles,_quartiles_s);
   define_unary_function_ptr5( at_quartiles ,alias_at_quartiles,&unary_quartiles,0,true);
 
+#ifdef WITH_SHEET // (the plots: DeltaCE draws its own)
   gen _moustache(const gen & g_orig,GIAC_CONTEXT){
     if ( g_orig.type==_STRNG && g_orig.subtype==-1) return  g_orig;
     vecteur attributs(1,FL_BLACK);
@@ -4932,6 +4943,7 @@ static define_unary_function_eval (__variance,&_variance,_variance_s);
   static const char _histogram_s []="histogram";
   static define_unary_function_eval (__histogram,&_histogram,_histogram_s);
   define_unary_function_ptr5( at_histogram ,alias_at_histogram,&__histogram,0,true);
+#endif
 
   vecteur genpoint2vecteur(const gen & g,GIAC_CONTEXT){
     vecteur v(gen2vecteur(g));
@@ -5258,6 +5270,7 @@ static define_unary_function_eval (__exponential_regression,&_exponential_regres
   static define_unary_function_eval (__power_regression,&_power_regression,_power_regression_s);
   define_unary_function_ptr5( at_power_regression ,alias_at_power_regression,&__power_regression,0,true);
 
+#ifdef WITH_SHEET // (the plots: DeltaCE draws its own)
   gen regression_plot_attributs(const gen & g,vecteur & attributs,bool & eq,bool & r,GIAC_CONTEXT){
     gen res=g;
     r=false; eq=false;
@@ -5417,6 +5430,7 @@ static define_unary_function_eval (__exponential_regression,&_exponential_regres
   static const char _power_regression_plot_s []="power_regression_plot";
   static define_unary_function_eval (__power_regression_plot,&_power_regression_plot,_power_regression_plot_s);
   define_unary_function_ptr5( at_power_regression_plot ,alias_at_power_regression_plot,&__power_regression_plot,0,true);
+#endif
 
   static gen polynomial_regression(const gen & g,int d,const gen & u1, const gen & u2,double & xmin, double & xmax,GIAC_CONTEXT){
     xmin=1e300,xmax=-xmin;
@@ -5486,6 +5500,7 @@ static define_unary_function_eval (__exponential_regression,&_exponential_regres
   static const char _polynomial_regression_s []="polynomial_regression";
   static define_unary_function_eval (__polynomial_regression,&_polynomial_regression,_polynomial_regression_s);
   define_unary_function_ptr5( at_polynomial_regression ,alias_at_polynomial_regression,&__polynomial_regression,0,true);
+#ifdef WITH_SHEET // (the plots: DeltaCE draws its own)
   gen _polynomial_regression_plot(const gen & g,GIAC_CONTEXT){
     if ( g.type==_STRNG && g.subtype==-1) return  g;
     double xmin,xmax;
@@ -5679,6 +5694,7 @@ static define_unary_function_eval (__exponential_regression,&_exponential_regres
   static const char _camembert_s []="camembert";
 static define_unary_function_eval (__camembert,&_camembert,_camembert_s);
   define_unary_function_ptr5( at_camembert ,alias_at_camembert,&__camembert,0,true);
+#endif
 
   gen _is_matrix(const gen & a,GIAC_CONTEXT){
     if (a.type==_STRNG && a.subtype==-1) return  a;
