@@ -6004,6 +6004,13 @@ namespace giac {
 
   // Horner like evaluation
   // m != 0 for modular evaluation
+  // gn^k, mod m when m is an integer and gn too (DeltaCE: the big power then mod m took minutes on
+  // the calculator in modular gcds, d/dx d/dx (3sin(x)+8cos(2x))^-3 hung)
+  static gen ppow(const gen & gn,int k,const gen & m){
+    if (m.type==_INT_ && m.val>0 && (gn.type==_INT_ || gn.type==_ZINT) && k>1)
+      return powmod(gn,k,m);
+    return pow(gn,k);
+  }
   static gen peval(vector< monomial<gen> >::const_iterator & it,const vector< monomial<gen> >::const_iterator & itend,const vecteur & nums,const vecteur & dens,const index_t & deg,index_t & cur_index,int nvar,int vsize,int var0,const gen & m){
     if (it==itend)
       return zero;
@@ -6047,7 +6054,7 @@ namespace giac {
 	++it;
       }
       cur_index.push_back(0);
-      gen res(pow(gd,prev_power));
+      gen res(ppow(gd,prev_power,m));
       if (!is_zero(m))
 	res=smod(res,m);
       res=res*peval(it,itend,nums,dens,deg,cur_index,nvar+1,vsize,var0,m);
@@ -6060,7 +6067,7 @@ namespace giac {
 	if (!prev_power)
 	  return res;
 	else
-	  return pevalmul(pow(gn,prev_power),res,m);
+	  return pevalmul(ppow(gn,prev_power,m),res,m);
 	// return pow(gn,prev_power)*res;
       }
       cur_power=*(it->index.begin()+nvar);
@@ -6069,11 +6076,11 @@ namespace giac {
       index_t::const_iterator it_ttend=it_tt+nvar,cur_it=cur_index.begin();
       for (;it_tt!=it_ttend;++cur_it,++it_tt){
 	if (*it_tt!=*cur_it)
-	  return pevalmul(pow(gn,prev_power),res,m);
+	  return pevalmul(ppow(gn,prev_power,m),res,m);
 	// return pow(gn,prev_power)*res;
       }
       // Yes: go one level deeper
-      tmp1=pevalmul(pow(gn,prev_power-cur_power),res,m);
+      tmp1=pevalmul(ppow(gn,prev_power-cur_power,m),res,m);
       res=zero;
       cur_index.push_back(cur_power);
       if (debug_infolevel>40)
@@ -6082,7 +6089,7 @@ namespace giac {
       cur_index.pop_back();
       if (debug_infolevel>40)
 	CERR << "// Back to level " << nvar << " " << CLOCK() << endl; 
-      cur_gd=cur_gd*pow(gd,prev_power-cur_power);
+      cur_gd=cur_gd*ppow(gd,prev_power-cur_power,m);
       if (!is_zero(m))
 	cur_gd=smod(cur_gd,m);
       // res=pevalmul(pow(gn,prev_power-cur_power),res)+cur_gd*peval(it,itend,nums,dens,deg,cur_index,nvar+1,vsize,var0);

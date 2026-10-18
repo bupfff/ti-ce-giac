@@ -2606,7 +2606,7 @@ namespace giac {
   bool gcdsmallmodpoly(const polynome &p,const polynome & q,int m,polynome & d,polynome & dp,polynome & dq,bool compute_cof){
     if (p.dim!=1 || q.dim!=1)
       return false;
-    bool promote = m>=46340;
+    bool promote = m>=GIAC_SQRT_INTMAX;
     int as=p.lexsorted_degree()+1,bs=q.lexsorted_degree()+1;
     if (as>1000000 || bs>1000000)
       return false;
@@ -2867,7 +2867,7 @@ namespace giac {
     int ainv=1;
     if (a!=aend)
       ainv=invmod(*a,m);
-    if (m>=46340){
+    if (m>=GIAC_SQRT_INTMAX){
       for (;a!=aend;++a){
 	d.push_back(smod((*a)*longlong(ainv),m));
       }
@@ -3028,7 +3028,7 @@ namespace giac {
   static polynome pevaln(const polynome & p,const gen & alpha,const gen & modulo,index_t * & degptr,bool estreel){
     int a=0,m=0,dim=p.dim;
     bool nonmod = is_zero(modulo);
-    bool smallmod = estreel && alpha.type==_INT_ && modulo.type==_INT_ && (m=modulo.val)<46340 && (a=alpha.val)<46340 ;
+    bool smallmod = estreel && alpha.type==_INT_ && modulo.type==_INT_ && (m=modulo.val)<GIAC_SQRT_INTMAX && (a=alpha.val)<GIAC_SQRT_INTMAX ;
     vector< monomial<gen> >::const_iterator it=p.coord.begin(),itend=p.coord.end();
     polynome res(dim);
     res.coord.reserve(itend-it);

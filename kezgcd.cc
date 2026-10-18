@@ -52,8 +52,13 @@ namespace giac {
     gen Fg,Gg;
     int essai=0;
     int dim=F.dim;
+#ifdef TICE // (DeltaCE: an int is 24 bits on the CE, the evaluation's products mod 30011 overflowed:
+    // gcd(x^2y^2-2xy+1,2xy^2-2y) was 1, sqrfree and factor of polynomials in x and y failed)
+    if (false){
+#else
     if ( //false &&
 	mod.type==_INT_ && mod.val){
+#endif
       int modulo=mod.val;
       std::vector<hashgcd_U> vars(dim);
       vector< T_unsigned<int,hashgcd_U> > f,g,fb,gb;

@@ -9543,12 +9543,13 @@ namespace giac {
     if (a==1 || a==-1 || a==1-b)
       return a;
     int aa(1),ab(0),ar(0);
-    div_t qr;
+    // (DeltaCE: / and %, not div(): CE toolchain v15's div() gives div(-2,5) the remainder 2, not
+    // -2, and invmod(-2,5) was -2: x^3+5x^2+8x+40 lost its factor x+5, partfrac and integrate failed)
     while (b){
-      qr=div(a,b);
-      ar=aa-qr.quot*ab;
+      const int q=a/b,r=a%b;
+      ar=aa-q*ab;
       a=b;
-      b=qr.rem;
+      b=r;
       aa=ab;
       ab=ar;
     }
@@ -9601,7 +9602,7 @@ namespace giac {
     if (n==1)
       return a;
     int b=a%m,c=1;
-    if (m<46340){
+    if (m<GIAC_SQRT_INTMAX){
       while (n>0){
 	if (n%2)
 	  c=(c*b)%m;

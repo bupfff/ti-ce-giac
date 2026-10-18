@@ -17,6 +17,13 @@
  */
 #ifndef _GIAC_GEN_H
 #define _GIAC_GEN_H
+// below it, a product of two ints fits in an int: sqrt(2^31), sqrt(2^23) on the TI-84 Plus CE (DeltaCE:
+// its ints are 24 bits; 46340 there made powmod mod 30011 wrong: sqrfree(x^4y^2+4x^2y+4) failed)
+#ifdef TICE
+#define GIAC_SQRT_INTMAX 2896
+#else
+#define GIAC_SQRT_INTMAX 46340
+#endif
 
 /* Warning: the size of a gen depend on the architecture and of compile-time flags
    Define -DSMARTPTR64 on 64 bit CPU if the pointers allocated by new are 48 bits
