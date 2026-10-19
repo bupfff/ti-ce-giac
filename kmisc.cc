@@ -7238,7 +7238,8 @@ inline void check_freeze(){
     const gen x=v[1],y=v.size()>2?v[2]:gen(identificateur("y"));
     if (x.type!=_IDNT || y.type!=_IDNT) return gensizeerr(contextptr);
     const gen F=v[0].is_symb_of_sommet(at_equal)?v[0]._SYMBptr->feuille[0]-v[0]._SYMBptr->feuille[1]:v[0];
-    return normal(-derive(F,x,contextptr)/derive(F,y,contextptr),contextptr);
+    const gen r=normal(-derive(F,x,contextptr)/derive(F,y,contextptr),contextptr),n=_numer(r,contextptr),d=_denom(r,contextptr);
+    return d.print(contextptr)[0]=='-'?symbolic(at_prod,makesequence(normal(-n,contextptr),symbolic(at_inv,normal(-d,contextptr)))):r; // (y*sin(x)/(cos(x)-8*y), not -y*sin(x)/(-cos(x)+8*y))
   }
   static const char _implicitdiff_s []="implicitdiff";
   static define_unary_function_eval (__implicitdiff,&_implicitdiff,_implicitdiff_s);
