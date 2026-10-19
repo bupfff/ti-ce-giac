@@ -7229,6 +7229,22 @@ inline void check_freeze(){
 #endif // HAVE_LIBCURL
 #endif // EMCC_FETCH
 
+#ifdef FLOWCE
+  // (DeltaCE) implicitdiff(eq,x,y): dy/dx for y a function of x given by eq, F(x,y) = 0: -F_x/F_y
+  gen _implicitdiff(const gen & args,GIAC_CONTEXT){
+    if ( args.type==_STRNG && args.subtype==-1) return  args;
+    if (args.type!=_VECT || args._VECTptr->size()<2) return gensizeerr(contextptr);
+    const vecteur & v=*args._VECTptr;
+    const gen x=v[1],y=v.size()>2?v[2]:gen(identificateur("y"));
+    if (x.type!=_IDNT || y.type!=_IDNT) return gensizeerr(contextptr);
+    const gen F=v[0].is_symb_of_sommet(at_equal)?v[0]._SYMBptr->feuille[0]-v[0]._SYMBptr->feuille[1]:v[0];
+    return normal(-derive(F,x,contextptr)/derive(F,y,contextptr),contextptr);
+  }
+  static const char _implicitdiff_s []="implicitdiff";
+  static define_unary_function_eval (__implicitdiff,&_implicitdiff,_implicitdiff_s);
+  define_unary_function_ptr5( at_implicitdiff ,alias_at_implicitdiff,&__implicitdiff,0,true);
+#endif
+
 #ifndef NO_NAMESPACE_GIAC
 } // namespace giac
 #endif // ndef NO_NAMESPACE_GIAC
