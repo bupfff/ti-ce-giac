@@ -4823,7 +4823,11 @@ namespace giac {
   static define_unary_function_eval_quoted (__rmbreakpoint,&_rmbreakpoint,_rmbreakpoint_s);
   define_unary_function_ptr5( at_rmbreakpoint ,alias_at_rmbreakpoint,&__rmbreakpoint,_QUOTE_ARGUMENTS,true);
 
-#if 1
+#ifdef FLOWCE
+  // (DeltaCE) no step-by-step debugger: the calculator has no program editor to show it in (and
+  // its screen was KhiCAS's); debug(...) runs the program as it is
+  void debug_loop(gen &res,GIAC_CONTEXT){}
+#elif 1
   void debug_loop(gen &res,GIAC_CONTEXT){
     if (!debug_ptr(contextptr)->debug_allowed || (!debug_ptr(contextptr)->sst_mode && !equalposcomp(debug_ptr(contextptr)->sst_at,debug_ptr(contextptr)->current_instruction)) )
       return;
