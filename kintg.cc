@@ -2316,6 +2316,50 @@ namespace giac {
   }
 
   // intmode bit 0 is used for sqrt int control, bit 1 control step/step info
+#ifdef FLOWCE
+  // (DeltaCE) P0 times a power Q^(k/2) of a quadratic, k = 1 or -1 (x^2*sqrt(1-x^2)), P0 not odd
+  // about Q's vertex (then u = Q does it: x*sqrt(1-x^2)): Ostrogradsky's method, written with P =
+  // P0*Q^((k+1)/2) over sqrt(Q): R*sqrt(Q) + lambda*integrate(1/sqrt(Q)), R of degree deg(P)-1 from
+  // R'Q + R Q'/2 + lambda = P, its coefficients from the top degree down (integrate_id_rem's general
+  // search took 19 s on the calculator for x^2*sqrt(1-x^2)). Its own function: in integrate_id_rem's
+  // big frame its code took 8 KB
+  static __attribute__((noinline)) bool sqrt_quadratic(const gen & e,const gen & x,const vecteur & rvar,gen & res,GIAC_CONTEXT){
+    if (rvar.size()!=2 || !rvar.back().is_symb_of_sommet(at_pow) || rvar.back()._SYMBptr->feuille.type!=_VECT)
+      return false;
+    const gen & rt=rvar.back(),& q=rt._SYMBptr->feuille._VECTptr->front(),& k=rt._SYMBptr->feuille._VECTptr->back();
+    const gen half=fraction(1,2),qc=_coeff(makesequence(q,x),contextptr);
+    if ((k!=half && k!=-half) || qc.type!=_VECT || qc._VECTptr->size()!=3 || !lidnt(qc).empty())
+      return false;
+    const gen A=qc[0],B=qc[1],C=qc[2],P0=ratnormal(e/rt,contextptr),Pt=ratnormal(subst(P0,x,x-B/(2*A),false,contextptr),contextptr);
+    const gen P=k==half?ratnormal(P0*q,contextptr):P0; // (over sqrt(Q): x^2/sqrt(9-x^2) has P0 = x^2/(9-x^2), P = x^2)
+    if (lvarx(P,x).size()>1 || !is_constant_wrt(_denom(P,contextptr),x,contextptr) || is_zero(ratnormal(Pt+subst(Pt,x,-x,false,contextptr),contextptr))) // (odd: u = Q)
+      return false;
+    const gen pc=_coeff(makesequence(P,x),contextptr);
+    const int n=pc.type==_VECT?int(pc._VECTptr->size())-1:0;
+    if (n<1 || n>12)
+      return false;
+    vecteur r(n+2,0); // R's coefficient of x^j at j; at m = 0 the equation gives lambda (r[n+1])
+    for (int m=n;m>=0;--m){
+      const gen t=ratnormal(pc[n-m]-gen(2*m+1)*B*r[m]*half-gen(m+1)*C*r[m+1],contextptr);
+      r[m?m-1:n+1]=m?ratnormal(t/(m*A),contextptr):t;
+    }
+    int low=0; // R as x^low times the rest: x*(2*x^2-1)/8, as giac writes it
+    while (low<n-1 && is_zero(r[low])) ++low;
+    gen R=0,I=0;
+    for (int j=n-1;j>=low;--j) R=R*x+r[j];
+    const gen & L=r[n+1],D=B*B-4*A*C,s=sqrt(q,contextptr);
+    if (!is_zero(L)){ // the integral of 1/sqrt(Q): asin(-(2Ax+B)/sqrt(D))/sqrt(-A), ln|sqrt(Q)+sqrt(A)x+B/(2sqrt(A))|/sqrt(A)
+      if (is_strictly_positive(A,contextptr))
+	I=lnabs(s+sqrt(A,contextptr)*x+ratnormal(B/(2*sqrt(A,contextptr)),contextptr),contextptr)/sqrt(A,contextptr);
+      else if (is_strictly_positive(D,contextptr))
+	I=asin(ratnormal(-(2*A*x+B)/sqrt(D,contextptr),contextptr),contextptr)/sqrt(-A,contextptr);
+      else
+	return false;
+    }
+    res=pow(x,low)*ratnormal(R,contextptr)*s+L*I;
+    return true;
+  }
+#endif
   gen integrate_id_rem(const gen & e_orig,const gen & gen_x,gen & remains_to_integrate,GIAC_CONTEXT,int intmode){
 #ifdef LOGINT
     LOGMSG << gettext("integrate id_rem ") << e_orig << "\n";
@@ -2480,6 +2524,10 @@ namespace giac {
     }
     vecteur rvar=v;
     gen fu,fx;
+#ifdef FLOWCE
+    if (sqrt_quadratic(e,gen_x,rvar,res,contextptr))
+      return res;
+#endif
     if (rvarsize<=TRY_FU_UPRIME){ // otherwise no hope
       const_iterateur it=v.begin(),itend=v.end();
       ++it; // don't try x!
@@ -3011,9 +3059,42 @@ namespace giac {
 
   static int ggb_intcounter=0;
 
+#ifdef FLOWCE
+  // (DeltaCE) sums, products and powers only (roots too): continuous where finite
+  static bool algebraic_only(const gen & g){
+    if (g.type==_VECT){
+      for (const_iterateur it=g._VECTptr->begin();it!=g._VECTptr->end();++it)
+	if (!algebraic_only(*it)) return false;
+      return true;
+    }
+    if (g.type!=_SYMB) return true;
+    const unary_function_ptr & u=g._SYMBptr->sommet;
+    return (u==at_plus || u==at_prod || u==at_pow || u==at_neg || u==at_inv) && algebraic_only(g._SYMBptr->feuille);
+  }
+  // (DeltaCE) an algebraic antiderivative at a bound: its value there when that is a number (the
+  // one-sided limit's series of 3*((-x)^(1/3)*(1/2+i*sqrt(3)/2))^2/2 at -1 took 7 s on the
+  // calculator for the same value), else the limit (x^(-1/2) at 0; ln, atan, abs: always)
+  static gen bound_value(const gen & F,const gen & x,const gen & b,int dir,GIAC_CONTEXT){
+    if (!is_inf(b) && algebraic_only(F)){
+      const gen v=eval(subst(F,x,b,false,contextptr),1,contextptr);
+      if (v.type!=_STRNG && !has_inf_or_undef(v))
+	return v;
+    }
+    return limit(F,*x._IDNTptr,b,dir,contextptr);
+  }
+#endif
   gen ck_int_numerically(const gen & f,const gen & x,const gen & a,const gen &b,const gen & exactvalue,GIAC_CONTEXT){
     if (is_inf(a) || is_inf(b))
       return exactvalue;
+#ifdef FLOWCE
+    // (DeltaCE) f infinite at an end (x^(-1/3) at 0, where giac splits the integral): the adaptive
+    // integration cannot get near it in a few parts (7 s on the calculator): the exact value as is
+    for (int k=0;k<2;++k){
+      const gen y=eval(subst(f,x,k?b:a,false,contextptr),1,contextptr);
+      if (y.type==_STRNG || has_inf_or_undef(y))
+	return simplifier(exactvalue,contextptr); // (as when the check agrees)
+    }
+#endif
     gen tmp=evalf_double(exactvalue,1,contextptr);
 #if defined HAVE_LIBMPFR && !defined NO_STDEXCEPT
     if ( (tmp.type==_DOUBLE_ || tmp.type==_CPLX) 
@@ -3031,7 +3112,15 @@ namespace giac {
     if (debug_infolevel)
       LOGMSG << gettext("Checking exact value of integral with numeric approximation")<<"\n";
     gen tmp2;
+#ifdef TICE
+    // (DeltaCE) 32-bit floats do not reach 1e-6 on a sum of 15 values: the adaptive integration
+    // cut an integrable singularity (x^(-1/3) at 0, sqrt(1-x^2) at 1) into 1024 parts before giving
+    // up (20 to 30 s, then the exact value unchecked). The check below needs 1e-3: 1e-4 and 32
+    // parts at most
+    if (!tegral(f,x,a,b,1e-4,(1<<5),tmp2,true,contextptr))
+#else
     if (!tegral(f,x,a,b,1e-6,(1<<10),tmp2,true,contextptr))
+#endif
       return exactvalue;
     tmp2=evalf_double(tmp2,1,contextptr);
     double tol=0;
@@ -3525,9 +3614,14 @@ namespace giac {
       giac_assume(symb_and(symb_superieur_egal(x,borne_inf),symb_inferieur_egal(x,borne_sup)),contextptr);
       primitive=eval(primitive,1,contextptr);
       restorepurge(xval,x,contextptr);
+#ifdef FLOWCE
+      gen rs=bound_value(primitive,x,borne_sup,-1,contextptr);
+      gen ri=bound_value(primitive,x,borne_inf,1,contextptr);
+#else
       gen rs=limit(primitive,*x._IDNTptr,borne_sup,-1,contextptr);
       //dbg_printf("limit borne_sup s\n",rs.print().c_str());
       gen ri=limit(primitive,*x._IDNTptr,borne_inf,1,contextptr);
+#endif
       //dbg_printf("limit borne_inf %s\n",ri.print().c_str());
       res=rs-ri;
       // res=limit(primitive,*x._IDNTptr,borne_sup,-1,contextptr)-limit(primitive,*x._IDNTptr,borne_inf,1,contextptr);
@@ -3549,9 +3643,14 @@ namespace giac {
 	giac_assume(symb_and(symb_superieur_egal(x,borne_inf),symb_inferieur_egal(x,borne_sup)),contextptr);
 	primitive=eval(primitive,1,contextptr);
 	restorepurge(xval,x,contextptr);
+#ifdef FLOWCE
+	gen rs=bound_value(primitive,x,borne_sup,-1,contextptr);
+	gen ri=bound_value(primitive,x,borne_inf,1,contextptr);
+#else
 	gen rs=limit(primitive,*x._IDNTptr,borne_sup,-1,contextptr);
         //dbg_printf("limit borne_sup s\n",rs.print().c_str());
 	gen ri=limit(primitive,*x._IDNTptr,borne_inf,1,contextptr);
+#endif
         //dbg_printf("limit borne_inf %s\n",ri.print().c_str());
 	res=rs-ri;
       }
@@ -3629,6 +3728,14 @@ namespace giac {
 	res = res - symb_integrate(rem,x,v[3],v[2]);
       return res;
     }
+#ifdef FLOWCE
+    for (int i=0;i<sps;i++){ // (DeltaCE) f infinite inside (x^(-1/3) at 0 on [-1,8]): no numeric check
+      if (!(ordonne && is_strictly_greater(sp[i],borne_inf,contextptr) && is_strictly_greater(borne_sup,sp[i],contextptr))) continue;
+      const gen y=eval(subst(v0orig,x,sp[i],false,contextptr),1,contextptr);
+      if (y.type==_STRNG || has_inf_or_undef(y))
+	return simplifier(res,contextptr); // (as ck_int_numerically when it agrees)
+    }
+#endif
     return ck_int_numerically(v0orig,x,aorig,borig,res,contextptr);
   }
   static const char _integrate_s []="integrate";
