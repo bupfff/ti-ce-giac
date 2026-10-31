@@ -2124,7 +2124,7 @@ namespace giac {
   }
 
   static void check_assume(vecteur & vzero,const vecteur & vassume,GIAC_CONTEXT){
-    for (unsigned i=0;i<vzero.size();++i){
+    for (unsigned i=0;i<vzero.size() && i<vassume.size();++i){ // (DeltaCE: vassume can be shorter, limit(sqrt(1+4/(9x^(2/3))),x,0) read past it)
       gen assi=vassume[i];
       if (assi.type==_VECT && assi.subtype==_ASSUME__VECT && assi._VECTptr->size()==3){
 	if((*assi._VECTptr)[1].type==_VECT && !(*assi._VECTptr)[1]._VECTptr->empty()){
