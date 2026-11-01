@@ -6,7 +6,9 @@ at_Kronecker,
 #ifdef WITH_QUAD
 at_a2q,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_abcuv,
+#endif
 at_about,
 at_abs,
 at_acos,
@@ -289,7 +291,9 @@ at_draw_string,
 at_ecris,
 at_efface_logo,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_egcd,
+#endif
 at_egv,
 at_egvl,
 at_eigenvals,
@@ -312,7 +316,9 @@ at_equal2list,
 //at_erf,
 //at_erfc,
 //at_erfs,
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_euler,
+#endif
 //at_euler_mac_laurin,
 at_eval,
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
@@ -391,9 +397,11 @@ at_fmod,
 //at_fopen,
 //at_format,
 #ifdef WITH_DESOLVE
+#ifndef FLOWCE // (DeltaCE) college-level (Laplace transforms, Fourier coefficients): out; desolve and odesolve stay (2026-11-01)
 at_fourier_an,
 at_fourier_bn,
 at_fourier_cn,
+#endif
 #endif
 //at_fprint,
 at_frac,
@@ -411,7 +419,9 @@ at_fxnd,
 #ifdef WITH_QUAD
 at_gauss,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_gaussquad,
+#endif
 //at_gbasis,
 at_gcd,
 //at_genpoly,
@@ -467,7 +477,9 @@ at_horner,
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 at_hyp2exp,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_iabcuv,
+#endif
 //at_ibasis,
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 at_ibpdv,
@@ -475,8 +487,12 @@ at_ibpdv,
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 at_ibpu,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_ichinrem,
+#endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_ichrem,
+#endif
 at_icontent,
 at_id,
 at_idivis,
@@ -490,7 +506,9 @@ at_ifactors,
 //at_igamma_exp,
 at_igcd,
 #if defined WITH_DESOLVE || defined WITH_LAPLACE
+#ifndef FLOWCE // (DeltaCE) college-level (Laplace transforms, Fourier coefficients): out; desolve and odesolve stay (2026-11-01)
 at_ilaplace,
+#endif
 #endif
 at_im,
 at_imag,
@@ -549,8 +567,12 @@ at_isprime,
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 at_jordan,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_ker,
+#endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_kernel,
+#endif
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 at_kill,
 #endif
@@ -562,12 +584,16 @@ at_label,
 at_lagrange,
 //at_laguerre,
 #if defined WITH_DESOLVE || defined WITH_LAPLACE
+#ifndef FLOWCE // (DeltaCE) college-level (Laplace transforms, Fourier coefficients): out; desolve and odesolve stay (2026-11-01)
 at_laplace,
+#endif
 #endif
 //at_laplacian,
 at_lcm,
 at_lcoeff,
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_ldegree,
+#endif
 at_left,
 //at_legende,
 //at_legende,
@@ -615,7 +641,9 @@ at_logarithmic_regression_plot,
 #endif
 at_logb,
 //at_lower,
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_lu,
+#endif
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
 at_lvar,
 #endif
@@ -650,7 +678,9 @@ at_min,
 #ifdef WITH_UNITS
 at_mksa,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_mods,
+#endif
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
 at_monotonic,
 #endif
@@ -866,7 +896,9 @@ at_repete,
 #ifdef RELEASE
 at_residue,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_resultant,
+#endif
 at_reverse,
 //at_reverse_rsolve,
 //at_revert,
@@ -939,7 +971,9 @@ at_sizes,
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
 at_sleep,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_smod,
+#endif
 //at_snedecord,
 //at_snedecord_cdf,
 //at_snedecord_icdf,
@@ -959,7 +993,9 @@ at_sorted,
 //at_spherical2rectangular,
 //at_split,
 at_sq,
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_sqrfree,
+#endif
 at_sqrt,
 at_srand,
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
@@ -1014,8 +1050,12 @@ at_tan2sincos2,
 at_tanh,
 //at_taux_accroissement,
 at_taylor,
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_tchebyshev1,
+#endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_tchebyshev2,
+#endif
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 at_tcoeff,
 #endif
@@ -1027,7 +1067,9 @@ at_texpand,
 at_throw,
 at_time,
 at_tlin,
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_total_degree,
+#endif
 #ifndef NOTURTLE
 at_tourne_droite,
 at_tourne_gauche,
@@ -1072,7 +1114,9 @@ at_unquote,
 #ifdef WITH_UNITS
 at_usimplify,
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 at_valuation,
+#endif
 //at_vandermonde,
 #if defined WITH_SHEET || defined WITH_STATS
 at_variance,

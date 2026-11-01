@@ -6,7 +6,9 @@
 #ifdef WITH_QUAD
 {"a2q",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"abcuv",0,9,13},
+#endif
 {"about",0,9,13},
 {"abs",0,9,13},
 {"acos",0,9,13},
@@ -289,7 +291,9 @@
 {"ecris",0,89,13},
 {"efface",0,89,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"egcd",0,9,13},
+#endif
 {"egv",0,9,13},
 {"egvl",0,9,13},
 {"eigenvals",0,9,13},
@@ -312,7 +316,9 @@
 //{"erf",0,9,13},
 //{"erfc",0,9,13},
 //{"erfs",0,9,13},
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"euler",0,9,13},
+#endif
 //{"euler_mac_laurin",0,9,13},
 {"eval",0| 1,9,13},
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
@@ -391,9 +397,11 @@
 //{"fopen",0,9,13},
 //{"format",0,9,13},
 #ifdef WITH_DESOLVE
+#ifndef FLOWCE // (DeltaCE) college-level (Laplace transforms, Fourier coefficients): out; desolve and odesolve stay (2026-11-01)
 {"fourier_an",0,9,13},
 {"fourier_bn",0,9,13},
 {"fourier_cn",0,9,13},
+#endif
 #endif
 //{"fprint",0,9,13},
 {"frac",0,9,13},
@@ -411,7 +419,9 @@
 #ifdef WITH_QUAD
 {"gauss",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"gaussquad",0,9,13},
+#endif
 //{"gbasis",0,9,13},
 {"gcd",0,9,13},
 //{"genpoly",0,9,13},
@@ -467,7 +477,9 @@
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 {"hyp2exp",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"iabcuv",0,9,13},
+#endif
 //{"ibasis",0,9,13},
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 {"ibpdv",0,9,13},
@@ -475,8 +487,12 @@
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 {"ibpu",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"ichinrem",0,9,13},
+#endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"ichrem",0,9,13},
+#endif
 {"icontent",0,9,13},
 {"id",0,9,13},
 {"idivis",0,9,13},
@@ -490,7 +506,9 @@
 //{"igamma_exp",0,9,13},
 {"igcd",0,9,13},
 #if defined WITH_DESOLVE || defined WITH_LAPLACE
+#ifndef FLOWCE // (DeltaCE) college-level (Laplace transforms, Fourier coefficients): out; desolve and odesolve stay (2026-11-01)
 {"ilaplace",0,9,13},
+#endif
 #endif
 {"im",0,9,13},
 {"imag",0,9,13},
@@ -549,8 +567,12 @@
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 {"jordan",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"ker",0,9,13},
+#endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"kernel",0,9,13},
+#endif
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 {"kill",0,9,13},
 #endif
@@ -562,12 +584,16 @@
 {"lagrange",0,9,13},
 //{"laguerre",0,9,13},
 #if defined WITH_DESOLVE || defined WITH_LAPLACE
+#ifndef FLOWCE // (DeltaCE) college-level (Laplace transforms, Fourier coefficients): out; desolve and odesolve stay (2026-11-01)
 {"laplace",0,9,13},
+#endif
 #endif
 //{"laplacian",0| 1,9,13},
 {"lcm",0,9,13},
 {"lcoeff",0,9,13},
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"ldegree",0,9,13},
+#endif
 {"left",0,9,13},
 //{"legend",0,9,13},
 //{"legende",0,9,13},
@@ -615,7 +641,9 @@
 #endif
 {"logb",0,9,13},
 //{"lower",0,9,13},
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"lu",0,9,13},
+#endif
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
 {"lvar",0,9,13},
 #endif
@@ -650,7 +678,9 @@
 #ifdef WITH_UNITS
 {"mksa",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"mods",0,9,13},
+#endif
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
 {"monotonic",0,9,13},
 #endif
@@ -866,7 +896,9 @@
 #ifdef RELEASE
 {"residue",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"resultant",0,9,13},
+#endif
 {"reverse",0,9,13},
 //{"reverse_rsolve",0,9,13},
 //{"revert",0,9,13},
@@ -939,7 +971,9 @@
 #ifndef FLOWCE // (DeltaCE) found nowhere (no menu, search, template): 51 such out, 19.3 KB (2026-10-31)
 {"sleep",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"smod",0,9,13},
+#endif
 //{"snedecord",0,9,13},
 //{"snedecord_cdf",0,9,13},
 //{"snedecord_icdf",0,9,13},
@@ -959,7 +993,9 @@
 //{"spherical2rectangular",0,9,13},
 //{"split",0,9,13},
 {"sq",0,9,13},
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"sqrfree",0,9,13},
+#endif
 {"sqrt",0,9,13},
 {"srand",0,72,13},
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
@@ -1014,8 +1050,12 @@
 {"tanh",0,9,13},
 //{"taux_accroissement",0,9,13},
 {"taylor",0,9,13},
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"tchebyshev1",0,9,13},
+#endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"tchebyshev2",0,9,13},
+#endif
 #ifndef FLOWCE // (DeltaCE) rarely typed, not in the command search: 54 such out, 37 KB (2026-10-25)
 {"tcoeff",0,9,13},
 #endif
@@ -1027,7 +1067,9 @@
 {"throw",0,72,13},
 {"time",0| 1,9,13},
 {"tlin",0,9,13},
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"total_degree",0,9,13},
+#endif
 #ifndef NOTURTLE
 {"tourne_droite",0,89,13},
 {"tourne_gauche",0,89,13},
@@ -1072,7 +1114,9 @@
 #ifdef WITH_UNITS
 {"usimplify",0,9,13},
 #endif
+#ifndef FLOWCE // (DeltaCE) college-level (number theory, linear algebra, several variables, numerics): out (2026-11-01)
 {"valuation",0,9,13},
+#endif
 //{"vandermonde",0,9,13},
 #if defined WITH_SHEET || defined WITH_STATS
 {"variance",0,9,13},
